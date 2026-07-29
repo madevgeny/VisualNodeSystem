@@ -65,7 +65,7 @@ void NodeArea::RenderNode(Node* Node) const
 	{
 		if (Node->GetRenderTitleBar())
 		{
-			ImGui::PushFont(nullptr, GetNodeTitleHeight(Node) * 0.9f);
+			ImGui::PushFont(nullptr);
 			// Drawing caption area.
 			ImVec2 TitleArea = Node->RightBottom;
 			TitleArea.y = Node->LeftTop.y + GetNodeTitleHeight(Node);
@@ -293,7 +293,7 @@ void NodeArea::RenderGrid(ImVec2 CurrentPosition) const
 
 void NodeArea::SelectFontSettings() const
 {
-	ImGui::PushFont(NODE_CORE.Fonts[0], 16.0f * Zoom);
+	ImGui::PushFont(NODE_CORE.Fonts[0]);
 }
 
 void NodeArea::Render()
