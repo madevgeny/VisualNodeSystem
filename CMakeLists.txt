@@ -6,6 +6,8 @@ set(CMAKE_CONFIGURATION_TYPES Debug Release)
 
 # set the project name
 project(VisualNodeSystem LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 option(VISUAL_NODE_SYSTEM_USE_EXTERNAL_IMGUI "Use an external ImGui library instead of compiling our own" OFF)
 option(VISUAL_NODE_SYSTEM_BUILD_SHARED_LIBS "Build VisualNodeSystem as a shared library" OFF)
@@ -281,6 +283,7 @@ else()
 endif()
 
 target_include_directories(VisualNodeSystem PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/jsoncpp)
+target_include_directories(VisualNodeSystem PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/stduuid)
 
 source_group("Source Files" FILES ${VisualNodeSystem_SRC})
 source_group("Source Files/SubSystems/VisualNodeArea/" FILES ${VisualNodeArea_SRC})
@@ -346,7 +349,7 @@ add_custom_target(VisualNodeSystemPreBuild
         -D PROJECT_VERSION_PREFIX=VISUAL_NODE_SYSTEM_
         -D PROJECT_VERSION_MAJOR=0
         -D PROJECT_VERSION_MINOR=2
-        -D PROJECT_VERSION_PATCH=0
+        -D PROJECT_VERSION_PATCH=4
         -D PROJECT_VERSION_DIR=${CMAKE_CURRENT_SOURCE_DIR}/VersionInfo
         -P ${CMAKE_CURRENT_SOURCE_DIR}/VersionInfo/UpdateProjectVersion.cmake
 	BYPRODUCTS
