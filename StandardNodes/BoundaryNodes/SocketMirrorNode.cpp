@@ -368,7 +368,7 @@ void SocketMirrorNode::Draw()
 
 		ImDrawList* DrawList = ImGui::GetWindowDrawList();
 		DrawList->AddRectFilled(ImVec2(MinX, MinY), ImVec2(MaxX, MaxY), FillColor, 6.0f * Zoom);
-		DrawList->AddRect(ImVec2(MinX, MinY), ImVec2(MaxX, MaxY), OutlineColor, 6.0f * Zoom, 0, 1.0f);
+		DrawList->AddRect(ImVec2(MinX, MinY), ImVec2(MaxX, MaxY), OutlineColor, 6.0f * Zoom, 1.0f, 0);
 	};
 
 	auto DrawAddSocketButton = [&](bool bInputFlowSide) {
