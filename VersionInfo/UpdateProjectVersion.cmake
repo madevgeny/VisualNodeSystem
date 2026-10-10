@@ -206,7 +206,9 @@ if("${_GIT_BRANCH}" STREQUAL "HEAD")
 endif()
 
 # --- Build timestamp ---
-string(TIMESTAMP _BUILD_TIMESTAMP \"%Y%m%d%H%M%S\")
+# Day granularity so the generated header does not change (and trigger
+# recompiles of every includer) on each build.
+string(TIMESTAMP _BUILD_TIMESTAMP \"%Y%m%d\")
 
 # --- Propagate into generic template variables ---
 # The generic ProjectVersion.h.in uses @PROJECT_VERSION_PREFIX@ for the macro prefix
@@ -239,9 +241,24 @@ endif()
 
 # --- Generate header ---
 # Uses the single generic template, outputs a project-specific header
-# in the project's source directory.
+# in the project's source directory. The header is written to a temporary
+# file first and only replaces the real header when the content actually
+# changed, so downstream source files are not recompiled on every build.
+set(_OUTPUT_HEADER ${PROJECT_VERSION_DIR}/${PROJECT_VERSION_PREFIX}Version.h)
+set(_TEMP_HEADER ${_OUTPUT_HEADER}.tmp)
+
 configure_file(
     ${PROJECT_VERSION_TEMPLATE_DIR}/ProjectVersion.h.in
-    ${PROJECT_VERSION_DIR}/${PROJECT_VERSION_PREFIX}Version.h
+    ${_TEMP_HEADER}
     @ONLY
 )
+
+execute_process(
+    COMMAND ${CMAKE_COMMAND} -E compare_files ${_TEMP_HEADER} ${_OUTPUT_HEADER}
+    RESULT_VARIABLE _COMPARE_RC
+)
+if(_COMPARE_RC EQUAL 0)
+    file(REMOVE ${_TEMP_HEADER})
+else()
+    file(RENAME ${_TEMP_HEADER} ${_OUTPUT_HEADER})
+endif()
